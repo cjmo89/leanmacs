@@ -29,18 +29,20 @@ impl Terminal {
         disable_raw_mode()
     }
 
-    pub fn clear_screen() -> Result<(), std::io::Error> {
-        queue!(stdout(), Clear(ClearType::All))
+    pub fn move_cursor_to(p: &Point) -> Result<(), std::io::Error> {
+        queue!(stdout(), MoveTo(p.x, p.y))
     }
 
     pub fn clear_line() -> Result<(), std::io::Error> {
         queue!(stdout(), Clear(ClearType::CurrentLine))
     }
 
-    pub fn move_cursor_to(p: &Point) -> Result<(), std::io::Error> {
-        queue!(stdout(), MoveTo(p.x, p.y))
+    pub fn clear_screen() -> Result<(), std::io::Error> {
+        queue!(stdout(), Clear(ClearType::All))
     }
 
+    // Returns the size of the terminal.
+    // as a Point.
     pub fn size() -> Result<Point, std::io::Error> {
         let size = size()?;
         Ok(Point {
